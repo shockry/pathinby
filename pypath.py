@@ -15,6 +15,7 @@ def createPath(dirPath='.', levelAligner='|', fileIndicator='|-',
     if pathMap is None:
         pathMap = []
     files = []
+
     # If directory, get visit its contents, otherwise just return
     try:
         files = listdir(dirPath.strip())
@@ -22,13 +23,18 @@ def createPath(dirPath='.', levelAligner='|', fileIndicator='|-',
         return
 
     for file in files:
-        pathMap.append((levelAligner if level > 0 else "") +
-                       (" "*level)+fileIndicator+file)
+        levelLine = formatLine(levelAligner, fileIndicator, file, level)
+        pathMap.append(levelLine)
 
         createPath(path.join(dirPath, file), levelAligner, fileIndicator,
                    level+1, pathMap)
 
     return pathMap
+
+
+def formatLine(levelAligner, fileIndicator, filename, level):
+    aligner = levelAligner if level > 0 else ""
+    return aligner + (" "*level) + fileIndicator + filename
 
 if __name__ == "__main__":
     main(argv)
