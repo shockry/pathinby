@@ -1,26 +1,30 @@
 from os import listdir, path
 from sys import argv
 
-if (not len(argv) > 1):
-    print "Please provide a directory path as an argument"
-    exit()
+def main(argv):
+    #If no directory is specified, use current directory
+    dir = '.'
+    if (len(argv) > 1):
+        dir = argv[1]
+    print '\n'.join(createPath())
 
-dirPath = argv[1].strip()
-
-levelAligner = '|';
-fileIndicator = '|-';
-
-def printPath(dir, level=0):
+def createPath(dir='.', levelAligner='|', fileIndicator='|-',
+        level=0, pathMap=[]):
     files = []
+    #If directory, get visit its contents, otherwise just return
     try:
-        files = listdir(dir)
+        files = listdir(dir.strip())
     except OSError:
         return
 
     for file in files:
-        print ((levelAligner if level > 0 else "") +
+        pathMap.append((levelAligner if level > 0 else "") +
             (" "*level)+fileIndicator+file)
-        printPath(path.join(dir, file), level+1)
+        
+        createPath(path.join(dir, file), levelAligner, fileIndicator,
+            level+1, pathMap)
 
-printPath(dirPath);
+    return pathMap
 
+if __name__ == "__main__":
+    main(argv)
