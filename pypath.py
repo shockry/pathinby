@@ -1,6 +1,14 @@
 from os import listdir, path
+from sys import argv
 
-dirPath = raw_input().strip()
+if (not len(argv) > 1):
+    print "Please provide a directory path as an argument"
+    exit()
+
+dirPath = argv[1].strip()
+
+levelAligner = '|';
+fileIndicator = '|-';
 
 def printPath(dir, level=0):
     files = []
@@ -10,7 +18,8 @@ def printPath(dir, level=0):
         return
 
     for file in files:
-        print ("-"*level)+file
+        print ((levelAligner if level > 0 else "") +
+            (" "*level)+fileIndicator+file)
         printPath(path.join(dir, file), level+1)
 
 printPath(dirPath);
