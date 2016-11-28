@@ -1,18 +1,15 @@
 from os import listdir, path
-from sys import argv
+import argparse
 
 
 def main(args):
-    # If no directory is specified, use current directory
-    dirPath = '.'
-    if len(args) > 1:
-        dirPath = args[1]
-
     outFile = None
-    if len(args) > 2:
-        outFile = open(args[2], 'w')
+    if args.output:
+        outFile = open(args.output, 'w')
 
-    print ('\n'.join(createPath(dirPath, outFile)))
+    path = createPath(args.directory, outFile)
+    if args.show:
+        print ('\n'.join(path))
 
 
 def createPath(dirPath='.', outFile=None, levelAligner='|',
@@ -52,4 +49,17 @@ def formatLine(levelAligner, fileIndicator, filename, level):
     return aligner + (" "*level) + fileIndicator + filename
 
 if __name__ == "__main__":
-    main(argv)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("directory",
+                        help="Create the path tree for the directory " +
+                             "with this path. If omitted, creates for " +
+                             "current directory",
+                        nargs='?', default='.')
+    parser.add_argument("-o", "--output",
+                        help="Name of the output file " +
+                             "(overwritten if present, created if not)")
+    parser.add_argument("-s", "--show",
+                        help="Print the output to terminal",
+                        action="store_true")
+    args = parser.parse_args()
+    main(args)
