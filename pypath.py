@@ -1,4 +1,4 @@
-from os import listdir, path
+import os
 import argparse
 
 
@@ -30,7 +30,7 @@ def generatePath(dirPath, levelAligner,
 
     # If directory, get visit its contents, otherwise just return
     try:
-        files = listdir(dirPath.strip())
+        files = os.listdir(dirPath.strip())
     except OSError:
         return
 
@@ -38,7 +38,7 @@ def generatePath(dirPath, levelAligner,
         levelLine = formatLine(levelAligner, fileIndicator, file, level)
         pathMap.append(levelLine)
 
-        generatePath(path.join(dirPath, file), levelAligner,
+        generatePath(os.path.join(dirPath, file), levelAligner,
                      fileIndicator, level+1, pathMap)
 
     return pathMap
