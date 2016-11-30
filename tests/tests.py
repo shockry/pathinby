@@ -62,6 +62,28 @@ class PathArrayTestCase(unittest.TestCase):
 
         self.assertEqual(actual, expected)
 
+    def test_output_file(self):
+        file1 = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
+        file2 = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
+        outputFile = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
+
+        fileObject = open(outputFile.name, 'r+w')
+        pypath.create_path(self.d, fileObject, '|', '|-')
+
+        with open(outputFile.name, 'r') as file:
+            actual = collections.Counter(file.read())
+
+        expected = collections.Counter(
+                    '\n'.join(
+                        ['|-'+os.path.basename(file1.name),
+                         '|-'+os.path.basename(file2.name),
+                         '|-'+os.path.basename(outputFile.name)
+                         ]
+                    )
+                   )
+
+        self.assertEqual(actual, expected)
+
     def tearDown(self):
         shutil.rmtree(self.d)
 
