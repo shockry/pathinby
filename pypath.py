@@ -3,6 +3,11 @@ import argparse
 
 
 def main(args):
+    """Receive command line arguments, output the result accordingly.
+
+    Arguments:
+    args: the result of parsing the command line arguments with argparse.
+    """
     outFile = None
     if args.output:
         outFile = open(args.output, 'w')
@@ -14,6 +19,22 @@ def main(args):
 
 def createPath(dirPath='.', outFile=None, levelAligner='|',
                fileIndicator='|-'):
+    """Create the path array for the specified directory.
+
+    Keyword argumens:
+    dirPath: a string representing a directory path to generate the array for.
+               (defaults to current directory, '.')
+    outFile: an open file object, the formatted output is written to this file.
+               (defaults to None)
+    levelAligner: a string representing the character that will be running
+                    through the left side of the output path tree to indicate
+                    the top level files. (defaults to a pipe '|')
+    fileIndicator: a string that is printed right before the file names.
+                     (defaults to a pipe and a hyphen '|-')
+
+    Returns:
+    An array of strings representing the path tree.
+    """
     path = generatePath(dirPath, levelAligner, fileIndicator)
 
     if outFile is not None and not outFile.closed:
@@ -28,7 +49,7 @@ def generatePath(dirPath, levelAligner,
         pathMap = []
     files = []
 
-    # If directory, get visit its contents, otherwise just return
+    # If directory, visit its contents, otherwise just return
     try:
         files = os.listdir(dirPath.strip())
     except OSError:
@@ -38,6 +59,7 @@ def generatePath(dirPath, levelAligner,
         levelLine = formatLine(levelAligner, fileIndicator, file, level)
         pathMap.append(levelLine)
 
+        # Recursively visit this entry
         generatePath(os.path.join(dirPath, file), levelAligner,
                      fileIndicator, level+1, pathMap)
 
