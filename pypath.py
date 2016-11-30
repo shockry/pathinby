@@ -12,12 +12,12 @@ def main(args):
     if args.output:
         outFile = open(args.output, 'w')
 
-    path = createPath(args.directory, outFile)
+    path = create_path(args.directory, outFile)
     if args.show:
         print ('\n'.join(path))
 
 
-def createPath(dirPath='.', outFile=None, levelAligner='|',
+def create_path(dirPath='.', outFile=None, levelAligner='|',
                fileIndicator='|-'):
     """Create the path array for the specified directory.
 
@@ -35,7 +35,7 @@ def createPath(dirPath='.', outFile=None, levelAligner='|',
     Returns:
     An array of strings representing the path tree.
     """
-    path = generatePath(dirPath, levelAligner, fileIndicator)
+    path = generate_path(dirPath, levelAligner, fileIndicator)
 
     if outFile is not None and not outFile.closed:
         outFile.write('\n'.join(path))
@@ -43,7 +43,7 @@ def createPath(dirPath='.', outFile=None, levelAligner='|',
     return path
 
 
-def generatePath(dirPath, levelAligner,
+def generate_path(dirPath, levelAligner,
                  fileIndicator, level=0, pathMap=None):
     if pathMap is None:
         pathMap = []
@@ -56,17 +56,17 @@ def generatePath(dirPath, levelAligner,
         return
 
     for file in files:
-        levelLine = formatLine(levelAligner, fileIndicator, file, level)
+        levelLine = format_line(levelAligner, fileIndicator, file, level)
         pathMap.append(levelLine)
 
         # Recursively visit this entry
-        generatePath(os.path.join(dirPath, file), levelAligner,
+        generate_path(os.path.join(dirPath, file), levelAligner,
                      fileIndicator, level+1, pathMap)
 
     return pathMap
 
 
-def formatLine(levelAligner, fileIndicator, filename, level):
+def format_line(levelAligner, fileIndicator, filename, level):
     aligner = levelAligner if level > 0 else ""
     return aligner + (" "*level) + fileIndicator + filename
 
