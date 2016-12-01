@@ -5,15 +5,15 @@ import tempfile
 import shutil
 import collections
 sys.path.insert(0, os.path.abspath('..'))
-import pypath
+import pathinby
 
 
 class TestLineFormatting(unittest.TestCase):
     def test_format_line(self):
-        self.assertEqual(pypath.format_line('|', '|-', 'foo', 0), '|-foo')
-        self.assertEqual(pypath.format_line('|', '|-', 'foo', 1), '| |-foo')
-        self.assertEqual(pypath.format_line('|', '|-', '', 0), '|-')
-        self.assertEqual(pypath.format_line('', '=>', 'bar', 2), '  =>bar')
+        self.assertEqual(pathinby.format_line('|', '|-', 'foo', 0), '|-foo')
+        self.assertEqual(pathinby.format_line('|', '|-', 'foo', 1), '| |-foo')
+        self.assertEqual(pathinby.format_line('|', '|-', '', 0), '|-')
+        self.assertEqual(pathinby.format_line('', '=>', 'bar', 2), '  =>bar')
 
 
 class PathArrayTestCase(unittest.TestCase):
@@ -21,7 +21,7 @@ class PathArrayTestCase(unittest.TestCase):
         self.d = tempfile.mkdtemp()
 
     def test_create_path_empty_directory(self):
-        actual = pypath.create_path(self.d, None, '|', '|-')
+        actual = pathinby.create_path(self.d, None, '|', '|-')
         expected = []
 
         self.assertEqual(actual, expected)
@@ -29,7 +29,7 @@ class PathArrayTestCase(unittest.TestCase):
     def test_create_path_one_file(self):
         file = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
 
-        actual = pypath.create_path(self.d, None, '|', '|-')
+        actual = pathinby.create_path(self.d, None, '|', '|-')
         expected = ['|-'+os.path.basename(file.name)]
 
         self.assertEqual(actual, expected)
@@ -38,7 +38,7 @@ class PathArrayTestCase(unittest.TestCase):
         file1 = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
         file2 = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
 
-        actual = collections.Counter(pypath.create_path(self.d, None, '|', '|-'))
+        actual = collections.Counter(pathinby.create_path(self.d, None, '|', '|-'))
         expected = collections.Counter(
                        ['|-'+os.path.basename(file1.name),
                         '|-'+os.path.basename(file2.name)
@@ -52,7 +52,7 @@ class PathArrayTestCase(unittest.TestCase):
         d2 = tempfile.mkdtemp(dir=self.d)
         file2 = tempfile.NamedTemporaryFile(dir=d2, delete=False)
 
-        actual = collections.Counter(pypath.create_path(self.d, None, '|', '|-'))
+        actual = collections.Counter(pathinby.create_path(self.d, None, '|', '|-'))
         expected = collections.Counter(
                        ['|-'+os.path.basename(file1.name),
                         '|-'+os.path.basename(d2),
@@ -68,7 +68,7 @@ class PathArrayTestCase(unittest.TestCase):
         outputFile = tempfile.NamedTemporaryFile(dir=self.d, delete=False)
 
         fileObject = open(outputFile.name, 'r+w')
-        pypath.create_path(self.d, fileObject, '|', '|-')
+        pathinby.create_path(self.d, fileObject, '|', '|-')
 
         with open(outputFile.name, 'r') as file:
             actual = collections.Counter(file.read())
