@@ -2,12 +2,22 @@ import os
 import argparse
 
 
-def main(args):
-    """Receive command line arguments, output the result accordingly.
+def main():
+    """Receive command line arguments, output the result accordingly."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("directory",
+                        help="Create the path tree for the directory " +
+                             "with this path. If omitted, creates for " +
+                             "current directory",
+                        nargs='?', default='.')
+    parser.add_argument("-o", "--output",
+                        help="Name of the output file " +
+                             "(overwritten if present, created if not)")
+    parser.add_argument("-s", "--show",
+                        help="Print the output to terminal",
+                        action="store_true")
+    args = parser.parse_args()
 
-    Arguments:
-    args: the result of parsing the command line arguments with argparse.
-    """
     outFile = None
     if args.output:
         outFile = open(args.output, 'w')
@@ -18,7 +28,7 @@ def main(args):
 
 
 def create_path(dirPath='.', outFile=None, levelAligner='|',
-               fileIndicator='|-'):
+                fileIndicator='|-'):
     """Create the path array for the specified directory.
 
     Keyword argumens:
@@ -44,7 +54,7 @@ def create_path(dirPath='.', outFile=None, levelAligner='|',
 
 
 def generate_path(dirPath, levelAligner,
-                 fileIndicator, level=0, pathMap=None):
+                  fileIndicator, level=0, pathMap=None):
     if pathMap is None:
         pathMap = []
     files = []
@@ -61,7 +71,7 @@ def generate_path(dirPath, levelAligner,
 
         # Recursively visit this entry
         generate_path(os.path.join(dirPath, file), levelAligner,
-                     fileIndicator, level+1, pathMap)
+                      fileIndicator, level+1, pathMap)
 
     return pathMap
 
@@ -71,17 +81,4 @@ def format_line(levelAligner, fileIndicator, filename, level):
     return aligner + (" "*level) + fileIndicator + filename
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("directory",
-                        help="Create the path tree for the directory " +
-                             "with this path. If omitted, creates for " +
-                             "current directory",
-                        nargs='?', default='.')
-    parser.add_argument("-o", "--output",
-                        help="Name of the output file " +
-                             "(overwritten if present, created if not)")
-    parser.add_argument("-s", "--show",
-                        help="Print the output to terminal",
-                        action="store_true")
-    args = parser.parse_args()
-    main(args)
+    main()
