@@ -8,6 +8,16 @@ that converts your directory structure into a nice formatted tree to use in your
 
 *You need Python 2.7+ or Python 3.x to run this module*
 
+installation
+^^^^^^^^^^^^
+Install through pypi
+
+.. code::
+
+  $ pip install pathinby
+
+|
+
 How to use
 ^^^^^^^^^^
 Imagine you have a directory structure like this:
