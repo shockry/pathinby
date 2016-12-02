@@ -10,6 +10,7 @@ setup(name='pathinby',
       description=('Generate a hierarchy of the contents of a directory, '
                    'Possibly outputting to a file'),
       long_description=readme(),
+      url='https://github.com/shockry/pathinby',
       author='Shokry',
       author_email='shokry92@gmail.com',
       license='MIT',
